@@ -16,83 +16,69 @@
 
     <header>
 
-      @yield('header-content')     
+      @yield('header-content')    
 
     </header>
       
     <main>
-      <br>
+      <h1>Meeting Rooms Administration</h1>
+      <?php 
+        $servidor='localhost: 33065';
+        $cuenta='root';
+        $password='';
+        $bd='meeting_rooms';  
+
+        $conexion = new mysqli($servidor,$cuenta,$password,$bd);
+
+        if ($conexion->connect_errno){
+            die('Error en la conexion');
+        }
+      ?>
+      
       {{-- the table is made with bootstrap. the dimensions are 4 columns x 9 rows --}}
-      <div class="container">
-          <table class="table table-dark table-striped">
-            <thead>
-              <tr>
-                <th>BOARDROOM</th>
-                <th>AVAILABLE</th>
-                <th>DEPARTURE TIME</th>
-                <th>RESERVE</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>#1</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#2</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#3</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#4</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#5</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#6</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#7</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>#8</td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="container" style="height: 500px;">
+        <button type="button" class="btn btn-success">Create New Room</button>
+        <?php
+          $sql = 'SELECT * FROM boardroom';//hacemos cadena con la sentencia mysql que consulta todo el contenido de la tabla
+          $resultado = $conexion -> query($sql); //aplicamos sentencia
+          if ($resultado -> num_rows){ //si la consulta genera registros
+              echo '<table class="table table-dark table-striped">';
+                echo '<thead>';
+                  echo '<tr>';
+                    echo '<th>BOARDROOM</th>';
+                    echo '<th>AVAILABLE</th>';
+                    echo '<th>ENTRY TIME</th>';
+                    echo '<th>DEPARTURE TIME</th>';
+                    echo '<th>RESERVE</th>';
+                    echo '<th>UPDATE/DELETE</th>';
+                  echo '</tr>';
+                echo '</thead>';
+                echo '<tbody>';
+                  while( $fila = $resultado -> fetch_assoc()){ //recorremos los registros obtenidos de la tabla
+                    echo '<tr>';
+                      echo '<td>'. $fila['id_room'] . '</td>';
+                      echo '<td>'. $fila['availability'] . '</td>';
+                      echo '<td>'. $fila['entry_time'] . '</td>';
+                      echo '<td>'. $fila['departure_time'] . '</td>';
+                      echo '<td>'.'<button type="button" class="btn btn-light">Reserve</button>'.'</td>';
+                      echo '<td>'.'<button type="button" class="btn btn-primary">Edit</button> <button type="button" class="btn btn-danger">DELETE</button>'.'</td>';
+                    echo '</tr>';
+                  }
+                echo '</tbody>';
+              echo '</table">';
+          }
+        ?>
           
+      </div>
+
     </main>
     {{-- footer is made with bootstrap --}}
-    <footer class="bg-dark text-white py-3">
+      {{--<footer class="bg-dark text-white py-3">
 
-      @yield('footer-content')  
-      
-    </footer>
+        @yield('footer-content')  
+        
+      </footer>--}}
       
 </body>
+
 </html>
