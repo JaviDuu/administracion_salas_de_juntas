@@ -35,13 +35,13 @@
         }
       ?>
       
-      {{-- the table is made with bootstrap. the dimensions are 4 columns x 9 rows --}}
+      {{-- the table is made with bootstrap --}}
       <div class="container" style="height: 500px;">
         <button type="button" class="btn btn-success">Create New Room</button>
         <?php
-          $sql = 'SELECT * FROM boardroom';//hacemos cadena con la sentencia mysql que consulta todo el contenido de la tabla
-          $resultado = $conexion -> query($sql); //aplicamos sentencia
-          if ($resultado -> num_rows){ //si la consulta genera registros
+          $sql = 'SELECT * FROM boardroom';//using mySQL to obtain db  
+          $resultado = $conexion -> query($sql); //we apply sentence
+          if ($resultado -> num_rows){ //checks if theres data 
               echo '<table class="table table-dark table-striped">';
                 echo '<thead>';
                   echo '<tr>';
@@ -54,19 +54,22 @@
                   echo '</tr>';
                 echo '</thead>';
                 echo '<tbody>';
-                  while( $fila = $resultado -> fetch_assoc()){ //recorremos los registros obtenidos de la tabla
+                  while( $fila = $resultado -> fetch_assoc()){ //loop through the records obtained from the table
                     echo '<tr>';
                       echo '<td>'. $fila['id_room'] . '</td>';
                       echo '<td>'. $fila['availability'] . '</td>';
                       echo '<td>'. $fila['entry_time'] . '</td>';
                       echo '<td>'. $fila['departure_time'] . '</td>';
                       echo '<td>'.'<button type="button" class="btn btn-light">Reserve</button>'.'</td>';
-                      echo '<td>'.'<button type="button" class="btn btn-primary">Edit</button> <button type="button" class="btn btn-danger">DELETE</button>'.'</td>';
+                      echo '<td>'.'<button type="button" class="btn btn-primary">Edit</button> <button type="button" class="btn btn-danger" value="'.$fila['id_room'].'">DELETE</button>'.'</td>';
                     echo '</tr>';
                   }
                 echo '</tbody>';
               echo '</table">';
           }
+          else{//bootstrap alert that pops up of theres no data
+             echo '<div class="alert alert-danger" role="alert">NO DATA</div>';
+         }
         ?>
           
       </div>
