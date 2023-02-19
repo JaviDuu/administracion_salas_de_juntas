@@ -6,6 +6,9 @@
 @endsection
 
 @section('content')
+<head>
+    <meta http-equiv="refresh" content="30">
+</head>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">

@@ -6,6 +6,10 @@ use App\Models\Room;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DateTime;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+
 
 /**
  * Class RoomController
@@ -118,6 +122,14 @@ class RoomController extends Controller
         ->with('success', 'Room updated successfully');
     }
 
+    public function timer(){
+        $rooms=Room::all('*');
+        foreach($rooms as $room){
+            echo '<script>console.log("'. $room->id .'")</script>';
+            echo '<script>console.log("hi")</script>';
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -186,4 +198,62 @@ class RoomController extends Controller
         return redirect()->route('rooms.index')
             ->with('success', 'Room deleted successfully');
     }
+
+    public function makeRoomsAvailable()
+    {
+        $occupiedRooms = Room::where('Available', 'Occupied')->get();
+        
+        foreach ($occupiedRooms as $room) {
+            $departureTime = Carbon::parse($room->departure_time);
+            
+            echo '<script>console.log("Now: '. Carbon::now('America/Mexico_City') .'")</script>';
+            echo '<script>console.log("Table: '. $departureTime .'")</script>';
+            echo '<script>console.log("London: '. Carbon::now('Europe/London') .'")</script>';
+
+            $now=Carbon::now('America/Mexico_City');
+            $table=Carbon::now('Europe/London');
+            $time= $departureTime->format('Y-m-d H:i:s');
+
+            if ($now->gt($time)) {
+                DB::transaction(function () use ($room) {
+                    $room->available = 'Available';
+                    $room->entry_time = null;
+                    $room->departure_time = null;
+                    $room->reserve = 'yes';
+                    $room->save();
+                    
+                });
+                
+            }
+        }
+
+        
+    }
+
+
+
+    /*private function releaseRoom(Room $room)
+{
+    // Check if the room has been occupied for 2 hours
+    $entry_time = $room->entry_time;
+    if ($entry_time) {
+        $now = Carbon::now();
+        $entry_time = Carbon::parse($entry_time);
+        $diff = $now->diffInMinutes($entry_time);
+        if ($diff >= 120) {
+            // The room has been occupied for 2 hours or more, release the room
+            DB::table('rooms')
+                ->where('id', $room->id)
+                ->update([
+                    'available' => 'Available',
+                    'entry_time' => null,
+                    'departure_time' => null,
+                    'reserve' => 'yes',
+                ]);
+        }
+    }
+}*/
 }
+
+
+
