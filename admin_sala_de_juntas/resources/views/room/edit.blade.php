@@ -25,7 +25,7 @@
                                     
                                     <div class="form-group">
                                         {{ Form::label('available') }}
-                                        {{ Form::text('available', 'Ocupied', ['class' => 'form-control' . ($errors->has('available') ? ' is-invalid' : ''), 'placeholder' => 'Available']) }}
+                                        {{ Form::text('available', 'Occupied', ['class' => 'form-control' . ($errors->has('available') ? ' is-invalid' : ''), 'placeholder' => 'Available']) }}
                                         {!! $errors->first('available', '<div class="invalid-feedback">:message</div>') !!}
                                     </div>
                                     <div class="form-group">

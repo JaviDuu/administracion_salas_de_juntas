@@ -59,7 +59,8 @@
                                                 <form action="{{ route('rooms.destroy',$room->id) }}" method="POST">
                                                     <a class="btn btn-sm btn-primary " href="{{ route('rooms.show',$room->id) }}"><i class="fa fa-fw fa-eye"></i> Show</a>
                                                     <a class="btn btn-sm btn-success" href="{{ route('rooms.edit',$room->id) }}"><i class="fa fa-fw fa-edit"></i> Reserve</a>
-                                                    <a class="btn btn-sm btn-warning" href="{{ route('rooms.edit',$room->id) }}"><i class="fa fa-fw fa-edit"></i> Mark as available</a>
+                                                    <a class="btn btn-sm btn-warning" href="{{ route('rooms.drop',$room->id) }}"><i class="fa fa-fw fa-edit"></i> Drop</a>
+
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Delete</button>
@@ -83,3 +84,29 @@
         alert("{{ session('error') }}");
     </script>
 @endif
+
+@section('scripts')
+    <script>
+        const dropButton = document.getElementById('drop-button');
+
+        dropButton.addEventListener('click', function(event) {
+            event.preventDefault(); // prevent the default link behavior
+
+            const roomID = {{ $room->id }}; // get the room ID from the PHP variable
+
+            // send an AJAX request to the server to drop the room
+            fetch(`/rooms/${roomID}/drop`, { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        // reload the page to show the updated room list
+                        window.location.reload();
+                    } else {
+                        throw new Error('Failed to drop the room.');
+                    }
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        });
+    </script>
+@endsection

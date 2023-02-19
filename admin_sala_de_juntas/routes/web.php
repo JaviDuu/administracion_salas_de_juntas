@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
+//Route::get('drop/{id}', 'RoomController@drop');Route::get('/rooms/{id}/drop', 'App\Http\Controllers\RoomController@drop')->name('rooms.drop');
+
+Route::get('/rooms/{id}/drop', 'App\Http\Controllers\RoomController@drop')->name('rooms.drop');
 
 Route::resource('rooms', RoomController::class);
 Auth::routes();

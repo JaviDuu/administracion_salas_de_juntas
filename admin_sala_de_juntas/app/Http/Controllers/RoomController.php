@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
-use Carbon;
+use App\Http\Controllers\Controller;
 use DateTime;
 
 /**
  * Class RoomController
  * @package App\Http\Controllers
  */
+
+ 
 class RoomController extends Controller
 {
     /**
@@ -81,6 +83,41 @@ class RoomController extends Controller
         
     }
 
+    public function drop($id)
+    {
+        /*$room = Room::find($id);
+            return view('room.available', compact('room'));*/
+        /*$room->available = 'Available';
+        $room->entry_time = null;
+        $room->departure_time = null;
+        $room->reserve = 'yes';
+        $room->save();
+
+        return response()->json(['success' => true]);*/
+        //Ocupied validation 
+        /*$availability = $room->available;
+        if($availability == 'Occupied'){
+            //update the room and redirect back to the rooms index with a success message
+            $room->update($request->all());
+
+            return redirect()->route('rooms.index')
+            ->with('success', 'Room updated successfully');
+        }else{
+            return redirect()->route('rooms.index')
+            ->with('error', 'This room is not occupied')
+            ->with('alert', 'alert');
+        }*/
+
+        $room=Room::find($id);
+        $room->available = 'Available';
+        $room->entry_time = null;
+        $room->departure_time = null;
+        $room->reserve = 'yes';
+        $room->save();
+        return redirect()->route('rooms.index')
+        ->with('success', 'Room updated successfully');
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -134,14 +171,8 @@ class RoomController extends Controller
                 ->with('error', 'You cannot reserve an ocupied room')
                 ->with('alert', 'alert');
             }
-            
         }
-        
-        
     }
-
-
-
     
     /**
      * @param int $id
