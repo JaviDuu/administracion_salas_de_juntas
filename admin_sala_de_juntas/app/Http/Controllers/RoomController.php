@@ -93,6 +93,7 @@ class RoomController extends Controller
         // Validate the request
         request()->validate(Room::$rules);
         
+        //time validation 
         // Get the entry and departure times from the request
         $entry_time = $request->entry_time;
         $departure_time = $request->departure_time;
@@ -121,11 +122,22 @@ class RoomController extends Controller
                 ->with('alert', 'alert');
         }
         else{
-            // If not, update the room and redirect back to the rooms index with a success message
-            $room->update($request->all());
-            return redirect()->route('rooms.index')
+            //Ocupied validation 
+            $availability = $room->available;
+            if($availability == 'Available'){
+                //update the room and redirect back to the rooms index with a success message
+                $room->update($request->all());
+                return redirect()->route('rooms.index')
                 ->with('success', 'Room updated successfully');
-        }        
+            }else{
+                return redirect()->route('rooms.index')
+                ->with('error', 'You cannot reserve an ocupied room')
+                ->with('alert', 'alert');
+            }
+            
+        }
+        
+        
     }
 
 
