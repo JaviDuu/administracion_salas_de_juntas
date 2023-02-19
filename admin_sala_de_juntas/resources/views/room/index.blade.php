@@ -1,3 +1,4 @@
+<?php use Illuminate\Support\Facades\DB;?>
 @extends('layouts.app')
 
 @section('template_title')
@@ -57,10 +58,12 @@
                                             <td>
                                                 <form action="{{ route('rooms.destroy',$room->id) }}" method="POST">
                                                     <a class="btn btn-sm btn-primary " href="{{ route('rooms.show',$room->id) }}"><i class="fa fa-fw fa-eye"></i> Show</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('rooms.edit',$room->id) }}"><i class="fa fa-fw fa-edit"></i> Edit</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('rooms.edit',$room->id) }}"><i class="fa fa-fw fa-edit"></i> Reserve</a>
+                                                    <a class="btn btn-sm btn-warning" href="{{ route('rooms.edit',$room->id) }}"><i class="fa fa-fw fa-edit"></i> Mark as available</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Delete</button>
+                                                    
                                                 </form>
                                             </td>
                                         </tr>
@@ -75,3 +78,8 @@
         </div>
     </div>
 @endsection
+@if(session('alert'))
+    <script>
+        alert("{{ session('error') }}");
+    </script>
+@endif

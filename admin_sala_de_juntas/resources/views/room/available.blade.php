@@ -16,7 +16,7 @@
                         <span class="card-title">Update Room</span>
                     </div>
                     <div class="card-body">
-                        <form method="POST" name="checkForm" action="{{ route('rooms.update', $room->id) }}"  role="form" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('rooms.update', $room->id) }}"  role="form" enctype="multipart/form-data">
                             {{ method_field('PATCH') }}
                             @csrf
 
@@ -25,7 +25,7 @@
                                     
                                     <div class="form-group">
                                         {{ Form::label('available') }}
-                                        {{ Form::text('available', 'Ocupied', ['class' => 'form-control' . ($errors->has('available') ? ' is-invalid' : ''), 'placeholder' => 'Available']) }}
+                                        {{ Form::text('available', 'Available', ['class' => 'form-control' . ($errors->has('available') ? ' is-invalid' : ''), 'placeholder' => 'Available']) }}
                                         {!! $errors->first('available', '<div class="invalid-feedback">:message</div>') !!}
                                     </div>
                                     <div class="form-group">

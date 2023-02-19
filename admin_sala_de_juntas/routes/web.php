@@ -23,3 +23,7 @@ Route::resource('rooms', RoomController::class);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Route::post('/rooms/set-available', 'RoomController@setAvailable')->name('rooms.set-available');
+//Route::post('rooms/{id}/set-available', 'App\Http\Controllers\RoomController@setAvailable')->name('rooms.set-available');
+

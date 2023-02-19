@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Carbon;
+use DateTime;
 
 /**
  * Class RoomController
@@ -73,8 +75,10 @@ class RoomController extends Controller
     public function edit($id)
     {
         $room = Room::find($id);
-
+        //return view('room.available', compact('room'));
+        
         return view('room.edit', compact('room'));
+        
     }
 
     /**
@@ -86,14 +90,47 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
+        // Validate the request
         request()->validate(Room::$rules);
-
-        $room->update($request->all());
-
-        return redirect()->route('rooms.index')
-            ->with('success', 'Room updated successfully');
+        
+        // Get the entry and departure times from the request
+        $entry_time = $request->entry_time;
+        $departure_time = $request->departure_time;
+        
+        // Create DateTime objects from the entry and departure times
+        $now = DateTime::createFromFormat('Y-m-d H:i:s', $entry_time);
+        $until = DateTime::createFromFormat('Y-m-d H:i:s', $departure_time);
+        
+        // Check if the DateTime objects were created successfully
+        if (!$now || !$until) {
+            // If not, redirect back to the rooms index with an error message
+            return redirect()->route('rooms.index')
+                ->with('error', 'Invalid date format. Please use Y-m-d H:i:s format.');
+        }
+        
+        // Calculate the time difference between the entry and departure times
+        $diff = $until->diff($now);
+        // Convert the time difference to hours, including any days
+        $hrs = $diff->h + ($diff->days * 24);
+        
+        // Check if the time difference is more than 2 hours
+        if($hrs > 2){
+            // If it is, redirect back to the rooms index with an error message and an alert
+            return redirect()->route('rooms.index')
+                ->with('error', 'You cannot be in a room for more than 2hrs')
+                ->with('alert', 'alert');
+        }
+        else{
+            // If not, update the room and redirect back to the rooms index with a success message
+            $room->update($request->all());
+            return redirect()->route('rooms.index')
+                ->with('success', 'Room updated successfully');
+        }        
     }
 
+
+
+    
     /**
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
